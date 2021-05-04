@@ -1,0 +1,3 @@
+[submodule "ext/geodesic"]
+	path = ext/geodesic
+	url = https://github.com/zishun/geodesic_matlab
