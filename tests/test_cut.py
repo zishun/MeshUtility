@@ -2,8 +2,8 @@ import openmesh as om
 
 import sys
 sys.path.append('../../')
-from MeshUtility import IsoCurve, write_obj_lines, \
-    split_mesh, cut_along_curve
+from MeshUtility import IsoCurve, write_obj_lines, split_mesh, \
+    cut_along_curve, split_connected_components
 
 
 def test_cut():
@@ -25,6 +25,11 @@ def test_cut():
                                       mesh.face_vertex_indices(),
                                       curve)
     om.write_mesh('../data/mesh_cut.obj', mesh)
+
+    parts = split_connected_components(mesh.points(),
+                                       mesh.face_vertex_indices())
+    for i in range(len(parts)):
+        om.write_mesh('../data/part_%d.obj' % i, parts[i])
 
 
 if __name__ == '__main__':

@@ -6,6 +6,7 @@ from .src.mesh_cut import *
 from .src.mesh_split import *
 from .src.mesh2graph import *
 from .src.sphere_cvt import *
+from .src.split_connected_components import *
 from .src.write_obj_lines import *
 if USE_CPP:
     from .src.lib import pygeodesic
