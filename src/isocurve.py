@@ -53,8 +53,8 @@ class IsoCurve:
         val : float
             extract the iso-curve of value val
         eqlTol : float
-             iso-curve passes vertex v if the value on v is within the
-             tolerance eqlTol of val
+            iso-curve passes vertex v if the value on v is within the
+            tolerance eqlTol of val
         Returns
         -------
         pts : m x 3 numpy.array (float)
