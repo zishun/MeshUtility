@@ -40,6 +40,7 @@ class IsoCurve:
 
         assert(points.shape[0] == field.size)
         self.mesh = om.TriMesh(points, faces)
+        assert self.mesh.n_vertices() == points.shape[0], "Invalid input mesh"
         self.field = field.copy()
         self.V = self.mesh.points()
         self.F = self.mesh.face_vertex_indices()

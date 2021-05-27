@@ -4,6 +4,11 @@ set(PROJECT_NAME MeshUtilityCPP)
 project (${PROJECT_NAME} CXX)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "No build type selected, default to Release")
+    set(CMAKE_BUILD_TYPE "Release")
+endif ()
+
 if (MSVC)
     find_package(pybind11 REQUIRED PATHS "C:\\vcpkg\\installed\\x64-windows")
 endif (MSVC)

@@ -25,7 +25,7 @@ def split_mesh(V, F, edges, ratios):
     F : numpy.array
     edges : numpy.array
     ratios : numpy.array
-        p0 * (1-r)+ p1 * r
+        p0 * (1-r) + p1 * r
     Returns
     -------
     mesh : openmesh.TriMesh
@@ -33,6 +33,7 @@ def split_mesh(V, F, edges, ratios):
     """
 
     mesh = om.TriMesh(V, F)
+    assert mesh.n_vertices() == V.shape[0], "Invalid input mesh"
 
     points = mesh.points()
     pts0 = points[edges[:, 0], :]

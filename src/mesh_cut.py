@@ -34,6 +34,7 @@ def cut_along_curve(V, F, curve_index):
     """
 
     mesh = om.TriMesh(V, F)
+    assert mesh.n_vertices() == V.shape[0], "Invalid input mesh"
     assert(len(curve_index) > 1)
 
     be_loop = (curve_index[0] == curve_index[-1])
