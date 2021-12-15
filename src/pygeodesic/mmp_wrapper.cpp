@@ -230,11 +230,12 @@ double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
 }
 
 void mmp_wrapper::edge_sourced_geodesic(std::vector<double>& points,
-                           const std::vector<unsigned>& faces,
-                           int num_dst,
-                           int segments,
-                           Eigen::MatrixXi& inserted_vertex_info,
-                           Eigen::VectorXd& D)
+                                        const std::vector<unsigned>& faces,
+                                        int num_dst,
+                                        int segments,
+                                        Eigen::MatrixXi& inserted_vertex_info,
+                                        Eigen::VectorXd& D,
+                                        double max_propagation_distance)
 {
     geodesic::Mesh mesh;
     D.setConstant(num_dst, std::numeric_limits<double>::max());
@@ -264,7 +265,7 @@ void mmp_wrapper::edge_sourced_geodesic(std::vector<double>& points,
         }
 
         // still produces 1e100 somewhere!
-        algorithm.propagate(all_sources, std::numeric_limits<double>::max());	//cover the whole mesh
+        algorithm.propagate(all_sources, max_propagation_distance);
 
         //for(unsigned i=0; i<mesh.vertices().size(); ++i)
         for(unsigned i=0; i<num_dst; ++i)
@@ -283,13 +284,14 @@ void mmp_wrapper::edge_sourced_geodesic(std::vector<double>& points,
 }
 
 void mmp_wrapper::vertex_sourced_geodesic(const std::vector<double>& points,
-                             const std::vector<unsigned>& faces,
-                             const Eigen::VectorXi& source_indices,
-                             Eigen::VectorXd& D)
+                                          const std::vector<unsigned>& faces,
+                                          const Eigen::VectorXi& source_indices,
+                                          Eigen::VectorXd& D,
+                                          double max_propagation_distance)
 {
     geodesic::Mesh mesh;
     mesh.initialize_mesh_data(points, faces);
-    geodesic::GeodesicAlgorithmExact algorithm(&mesh);	//create exact algorithm for the mesh
+    geodesic::GeodesicAlgorithmExact algorithm(&mesh);	// create exact algorithm for the mesh
     std::vector<geodesic::SurfacePoint> all_sources;
     all_sources.reserve(source_indices.size());
     for (size_t i = 0; i < source_indices.size(); ++i)
@@ -297,8 +299,7 @@ void mmp_wrapper::vertex_sourced_geodesic(const std::vector<double>& points,
         all_sources.push_back(&mesh.vertices()[source_indices[i]]);
     }
 
-    algorithm.propagate(all_sources);	//cover the whole mesh
-
+    algorithm.propagate(all_sources, max_propagation_distance);
     D.resize(mesh.vertices().size());
     for(unsigned i=0; i<mesh.vertices().size(); ++i)
     {
@@ -306,7 +307,7 @@ void mmp_wrapper::vertex_sourced_geodesic(const std::vector<double>& points,
 
         double distance;
         //unsigned best_source = algorithm.best_source(p,distance);		//for a given surface point, find closets source and distance to this source
-        algorithm.best_source(p,distance);
+        algorithm.best_source(p, distance);
         //std::cout << distance << " ";		//print geodesic distance for every vertex
         D[i] = distance;
     }
@@ -318,9 +319,11 @@ void mmp_wrapper::distance_field(const Eigen::MatrixXd& V,
                                  const Eigen::MatrixXi& F,
                                  const Eigen::VectorXi& source_indices,
                                  Eigen::VectorXd& D,
-                                 double edge_split)
+                                 double edge_split,
+                                 double max_propagation_distance)
 {
-    // std::vector<int> source_indices;
+    if (max_propagation_distance < 0.0)
+        max_propagation_distance = std::numeric_limits<double>::max();	// cover the whole mesh
 
     Eigen::VectorXi source_vertex_mask;
     source_vertex_mask.setZero(V.rows());
@@ -342,7 +345,8 @@ void mmp_wrapper::distance_field(const Eigen::MatrixXd& V,
                               V.rows(), // int num_dst,
                               segments,
                               inserted_vertex_info,
-                              D);
+                              D,
+                              max_propagation_distance);
         // correct results for sources
         for (size_t i = 0; i < source_indices.size(); ++i)
         {
@@ -354,6 +358,7 @@ void mmp_wrapper::distance_field(const Eigen::MatrixXd& V,
         VF_eigenmat_to_stlvector(V, F, points, faces);
         vertex_sourced_geodesic(points, faces,
                                 source_indices,
-                                D);
+                                D,
+                                max_propagation_distance);
     }
 }

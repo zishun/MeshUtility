@@ -30,12 +30,13 @@ Eigen::VectorXd
 distance_field(const Eigen::MatrixXd& V,
                const Eigen::MatrixXi& F,
                const Eigen::VectorXi& source_indices,
-               double edge_split = -1.0)
+               double edge_split,
+               double max_propagation_distance)
 {
     Eigen::VectorXd D;
 
     mmp_wrapper wrapper;
-    wrapper.distance_field(V, F, source_indices, D, edge_split);
+    wrapper.distance_field(V, F, source_indices, D, edge_split, max_propagation_distance);
     return D;
 }
 
@@ -44,6 +45,9 @@ PYBIND11_MODULE(pygeodesic, m) {
 
     // todo: add help for functions
 
-    m.def("find_path", &find_path, "");
-    m.def("distance_field", &distance_field, "");
+    m.def("find_path", &find_path, "Find a geodesic path from vertex <src> to vertex <dst> on the mesh.",
+          py::arg("V"), py::arg("F"), py::arg("src"), py::arg("dst"));
+    m.def("distance_field", &distance_field, "Compute the geodesic distance field on the mesh, source from <source_indices>.",
+          py::arg("V"), py::arg("F"), py::arg("source_indieces"),
+          py::arg("edge_split")=-1.0, py::arg("max_propagation_distance")=-1.0);
 }

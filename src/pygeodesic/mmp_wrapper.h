@@ -37,7 +37,8 @@ public:
                         const Eigen::MatrixXi& F,
                         const Eigen::VectorXi& source_indices,
                         Eigen::VectorXd& D,
-                        double edge_split = -1.0);
+                        double edge_split,
+                        double max_propagation_distance);
 
 private:
     bool VF_eigenmat_to_stlvector(const Eigen::MatrixXd& V,
@@ -71,10 +72,12 @@ private:
                                int num_dst,
                                int segments,
                                Eigen::MatrixXi& inserted_vertex_info,
-                               Eigen::VectorXd& D);
+                               Eigen::VectorXd& D,
+                               double max_propagation_distance);
 
     void vertex_sourced_geodesic(const std::vector<double>& points,
                                  const std::vector<unsigned>& faces,
                                  const Eigen::VectorXi& source_indices,
-                                 Eigen::VectorXd& D);
+                                 Eigen::VectorXd& D,
+                                 double max_propagation_distance);
 };
