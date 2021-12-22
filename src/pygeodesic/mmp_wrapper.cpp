@@ -192,6 +192,9 @@ double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
                 OMesh::FaceHandle fh = mesh.face_handle(he);
                 OMesh::HalfedgeHandle nhe = mesh.next_halfedge_handle(he);
                 OMesh::VertexHandle vh2 = mesh.to_vertex_handle(nhe);
+                if (mask[vh2.idx()]) {
+                    std::cout << "Cannot split. Flip edge01!" << std::endl;
+                }
                 int fid = fh.idx();
                 faces[3*fid]   = vh1.idx();
                 faces[3*fid+1] = vh2.idx();
@@ -206,6 +209,9 @@ double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
                 OMesh::FaceHandle fh = mesh.face_handle(he);
                 OMesh::HalfedgeHandle nhe = mesh.next_halfedge_handle(he);
                 OMesh::VertexHandle vh2 = mesh.to_vertex_handle(nhe);
+                if (mask[vh2.idx()]) {
+                    std::cout << "Cannot split. Flip edge01!" << std::endl;
+                }
                 int fid = fh.idx();
                 faces[3*fid]   = vh0.idx();
                 faces[3*fid+1] = vh2.idx();
@@ -340,7 +346,7 @@ void mmp_wrapper::distance_field(const Eigen::MatrixXd& V,
         double max_length =
         construct_mesh_for_edge_based_geodesic(V, F, source_vertex_mask,
                                                points, faces, inserted_vertex_info);
-        int segments = std::ceil(max_length/edge_split);
+        int segments = std::max(1.0, std::ceil(max_length/edge_split));
         edge_sourced_geodesic(points, faces,
                               V.rows(), // int num_dst,
                               segments,
