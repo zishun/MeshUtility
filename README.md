@@ -2,6 +2,8 @@
 
 A collection of python utilities for mesh processing.
 
+A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtility/).
+
 
 ## Functions
 - ```colormap_vertex_color```: assign vertex color to visualize a scalar field defined on mesh.
