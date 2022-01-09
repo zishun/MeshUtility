@@ -6,9 +6,7 @@
 // This Source Code Form is subject to the terms of the 3-Clause BSD License.
 // If a copy of the BSD-3-Clause was not distributed with this file, You can
 // obtain one at https://opensource.org/licenses/BSD-3-Clause.
-/*
- * assume no 3 source vertices are on the same face.
-*/
+
 // export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 
 #include <iostream>
@@ -56,13 +54,10 @@ private:
                    Eigen::MatrixXi& path_edge,
                    Eigen::VectorXd& path_ratio);
 
-    //void load_sources(const std::string& filename, const Eigen::MatrixXd& V_all,
-    //                  std::vector<int>& sources);
-
     double construct_mesh_for_edge_based_geodesic(
             const Eigen::MatrixXd& V,
             const Eigen::MatrixXi& F,
-            const Eigen::VectorXi& mask,
+            const Eigen::VectorXi& source_indices,
             std::vector<double>& points,
             std::vector<unsigned>& faces,
             Eigen::MatrixXi& inserted_vertex_info);

@@ -126,29 +126,71 @@ void mmp_wrapper::find_path(const std::vector<double>& points,
 double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
         const Eigen::MatrixXd& V,
         const Eigen::MatrixXi& F,
-        const Eigen::VectorXi& mask,
+        const Eigen::VectorXi& source_indices,
         std::vector<double>& points,
         std::vector<unsigned>& faces,
         Eigen::MatrixXi& inserted_vertex_info)
 {
+    VF_eigenmat_to_stlvector(V, F, points, faces);
+    // V, F will not be used from now on.
+
+    // check if 3 source vertices are on the same face.
+    Eigen::VectorXi source_vertex_mask;
+    source_vertex_mask.setZero(points.size()/3);
+    for (Eigen::Index i = 0; i < source_indices.size(); ++i)
+    {
+        source_vertex_mask[source_indices[i]] = 1;
+    }
+    for (size_t f = 0; f < faces.size()/3; ++f)
+    {
+        if (source_vertex_mask[f*3] == 1 && source_vertex_mask[f*3+1] == 1 &&
+                source_vertex_mask[f*3+2] == 1)
+        {
+            // subdivide the face
+            //              v0
+            //             /|\
+            //            / | -\
+            //           /  |   -\
+            //          /   +     -\
+            //         /   /v3\     -\
+            //        /  /-    --\    -\
+            //       / /-         ---\  -\
+            //      //-               --\ -\
+            //  v1 /------------------------\  v2
+            //
+            // generated with https://textik.com/
+
+            int v0 = faces[f*3];
+            int v1 = faces[f*3+1];
+            int v2 = faces[f*3+2];
+            int k = points.size()/3;
+            points.push_back((points[v0*3] + points[v1*3] + points[v2*3])/3);
+            points.push_back((points[v0*3+1] + points[v1*3+1] + points[v2*3+1])/3);
+            points.push_back((points[v0*3+2] + points[v1*3+2] + points[v2*3+2])/3);
+            faces[f*3+2] = k;
+            faces.push_back(v1); faces.push_back(v2); faces.push_back(k);
+            faces.push_back(v2); faces.push_back(v0); faces.push_back(k);
+        }
+    }
+
     // construct OpenMesh
     OMesh mesh;
-    std::vector<OMesh::VertexHandle> vhandles(V.rows());
-    for (Eigen::Index i = 0; i < V.rows(); ++i)
+    int nV = points.size()/3;
+    std::vector<OMesh::VertexHandle> vhandles(nV);
+    for (int i = 0; i < nV; ++i)
     {
-        vhandles[i] = mesh.add_vertex(OMesh::Point(V(i,0), V(i,1), V(i,2)));
+        vhandles[i] = mesh.add_vertex(OMesh::Point(points[i*3], points[i*3+1], points[i*3+2]));
     }
 
     std::vector<OMesh::VertexHandle> face_vhandles(3);
-    for (Eigen::Index i = 0; i < F.rows(); ++i)
+    int nF = faces.size()/3;
+    for (int i = 0; i < nF; ++i)
     {
-        face_vhandles[0] = vhandles[F(i,0)];
-        face_vhandles[1] = vhandles[F(i,1)];
-        face_vhandles[2] = vhandles[F(i,2)];
+        face_vhandles[0] = vhandles[faces[i*3]];
+        face_vhandles[1] = vhandles[faces[i*3+1]];
+        face_vhandles[2] = vhandles[faces[i*3+2]];
         mesh.add_face(face_vhandles);
     }
-
-    VF_eigenmat_to_stlvector(V, F, points, faces);
 
     std::vector<int> inserted_vertex;
     std::vector<int> edge_0;
@@ -156,13 +198,16 @@ double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
 
     // find edges
     float max_source_edge_length = 0.0;
-    OMesh::EdgeIter e_it, e_end(mesh.edges_end());
-    for (e_it=mesh.edges_begin(); e_it!=e_end; ++e_it)
+    for (int i = 0; i < source_indices.size()-1; ++i)
     {
-        OMesh::HalfedgeHandle he = mesh.halfedge_handle(*e_it, 0);
-        OMesh::VertexHandle vh0 = mesh.from_vertex_handle(he);
-        OMesh::VertexHandle vh1 = mesh.to_vertex_handle(he);
-        if (mask[vh0.idx()] == 1 && mask[vh1.idx()] == 1)
+        OMesh::VertexHandle vh0 = mesh.vertex_handle(source_indices[i]);
+        OMesh::VertexHandle vh1 = mesh.vertex_handle(source_indices[i+1]);
+        OMesh::HalfedgeHandle he = mesh.find_halfedge(vh0, vh1);
+        if (!he.is_valid())
+        {
+            std::cout << "can not find edge: " << source_indices[i] << "->" << source_indices[i+1] << std::endl;
+        }
+        else
         {
 //         2
 //        /|`.
@@ -192,9 +237,6 @@ double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
                 OMesh::FaceHandle fh = mesh.face_handle(he);
                 OMesh::HalfedgeHandle nhe = mesh.next_halfedge_handle(he);
                 OMesh::VertexHandle vh2 = mesh.to_vertex_handle(nhe);
-                if (mask[vh2.idx()]) {
-                    std::cout << "Cannot split. Flip edge01!" << std::endl;
-                }
                 int fid = fh.idx();
                 faces[3*fid]   = vh1.idx();
                 faces[3*fid+1] = vh2.idx();
@@ -209,9 +251,6 @@ double mmp_wrapper::construct_mesh_for_edge_based_geodesic(
                 OMesh::FaceHandle fh = mesh.face_handle(he);
                 OMesh::HalfedgeHandle nhe = mesh.next_halfedge_handle(he);
                 OMesh::VertexHandle vh2 = mesh.to_vertex_handle(nhe);
-                if (mask[vh2.idx()]) {
-                    std::cout << "Cannot split. Flip edge01!" << std::endl;
-                }
                 int fid = fh.idx();
                 faces[3*fid]   = vh0.idx();
                 faces[3*fid+1] = vh2.idx();
@@ -331,29 +370,22 @@ void mmp_wrapper::distance_field(const Eigen::MatrixXd& V,
     if (max_propagation_distance < 0.0)
         max_propagation_distance = std::numeric_limits<double>::max();	// cover the whole mesh
 
-    Eigen::VectorXi source_vertex_mask;
-    source_vertex_mask.setZero(V.rows());
-    for (Eigen::Index i = 0; i < source_indices.size(); ++i)
-    {
-        source_vertex_mask[source_indices[i]] = 1;
-    }
-
     std::vector<double> points;
     std::vector<unsigned> faces;
     Eigen::MatrixXi inserted_vertex_info;
     if (edge_split > 0.0)
     {
         double max_length =
-        construct_mesh_for_edge_based_geodesic(V, F, source_vertex_mask,
+        construct_mesh_for_edge_based_geodesic(V, F, source_indices,
                                                points, faces, inserted_vertex_info);
-        int segments = std::max(1.0, std::ceil(max_length/edge_split));
+        int segments = std::ceil(max_length/edge_split);
         edge_sourced_geodesic(points, faces,
                               V.rows(), // int num_dst,
                               segments,
                               inserted_vertex_info,
                               D,
                               max_propagation_distance);
-        // correct results for sources
+        // results on sources should be 0.
         for (size_t i = 0; i < source_indices.size(); ++i)
         {
             D[source_indices[i]] = 0.0;
