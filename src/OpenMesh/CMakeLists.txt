@@ -79,6 +79,7 @@ set(SRC_FILES
 
 add_library(${PROJECT_NAME} STATIC
             ${SRC_FILES})
+target_include_directories(${PROJECT_NAME} PRIVATE "../../ext/OpenMesh-9.0.0/")
 
 if (MSVC)
     add_definitions(-D_USE_MATH_DEFINES -D_CRT_SECURE_NO_WARNINGS)

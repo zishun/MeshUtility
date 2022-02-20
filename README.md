@@ -25,7 +25,8 @@ Python:
 * networkx: pip
 * matplotlib: pip
 * scipy: pip
-* meshplot: ```conda install -c conda-forge meshplot```
+* meshplot: only for jupyter notebook 
+    * ```conda install -c conda-forge meshplot```
 
 C++:
 * eigen: submodule.
@@ -36,3 +37,4 @@ C++:
 
 ## Build
 1. Clone the repo: ```git clone --recurse-submodules https://github.com/zishun/MeshUtility.git```
+2. ```python setup.py install```
