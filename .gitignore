@@ -3,3 +3,7 @@ __pycache__
 */**/.vscode
 build-*/
 */**/.ipynb_checkpoints
+
+build/
+dist/
+meshutility.egg-info/

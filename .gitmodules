@@ -1,3 +1,9 @@
 [submodule "ext/geodesic"]
 	path = ext/geodesic
 	url = https://github.com/zishun/geodesic_matlab
+[submodule "ext/pybind11"]
+	path = ext/pybind11
+	url = https://github.com/pybind/pybind11.git
+[submodule "ext/eigen"]
+	path = ext/eigen
+	url = https://github.com/libigl/eigen.git

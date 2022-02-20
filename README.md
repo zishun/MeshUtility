@@ -16,13 +16,23 @@ A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtil
 - ```pyisocurve``` (C++ based): almost the same as ```isocurve``` above.
 - ```pygeodesic``` (C++ based): exact geodesic for triangular meshes.
 
+
+## Dependencies
+
+Python:
+* numpy: pip
+* openmesh: pip
+* networkx: pip
+* matplotlib: pip
+* scipy: pip
+* meshplot: ```conda install -c conda-forge meshplot```
+
+C++:
+* eigen: submodule.
+* OpenMesh: included.
+* libigl: submodule.
+* geodesic: submodule. Danil Kirsanov's implementation of MMP algorithm.
+
+
 ## Build
 1. Clone the repo: ```git clone --recurse-submodules https://github.com/zishun/MeshUtility.git```
-2. Build C++ modules. if you do not need them (see the list above), set ```USE_CPP = False``` in [```__init__.py```](https://github.com/zishun/MeshUtility/blob/main/__init__.py#L1) and skip this step.
-    1. Install required C++ libraries
-        - pybind11
-        - eigen3
-        - openmesh
-    2. Build using ```src\CMakeLists.txt```.
-        - On Windows, you may copy ```OpenMeshCore.dll``` to ```src\lib\```.
-3. Install required Python modules. See ```requirements.txt```.
