@@ -11,6 +11,7 @@ set(SRC_FILES
 
 pybind11_add_module(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE "../../ext/eigen/")
+target_include_directories(${PROJECT_NAME} PRIVATE "../../ext/OpenMesh-9.0.0/")
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenMeshCore)
 
 if (MSVC)
