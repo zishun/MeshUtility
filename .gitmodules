@@ -8,3 +8,6 @@
 [submodule "ext/eigen"]
 	path = ext/eigen
 	url = https://github.com/libigl/eigen.git
+[submodule "ext/libigl"]
+	path = ext/libigl
+	url = https://github.com/libigl/libigl/

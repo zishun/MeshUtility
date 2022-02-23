@@ -20,20 +20,26 @@ A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtil
 ## Dependencies
 
 Python:
-* numpy: pip
-* openmesh: pip
-* networkx: pip
-* matplotlib: pip
-* scipy: pip
+* numpy
+* scipy
+* networkx
+* matplotlib
+* openmesh
 * meshplot: only for jupyter notebook 
-    * ```conda install -c conda-forge meshplot```
+
+Install with 
+```shell
+pip install numpy scipy networkx matplotlib openmesh
+conda install -c conda-forge meshplot
+```
 
 C++:
-* eigen: submodule.
-* OpenMesh: included.
-* libigl: submodule.
-* geodesic: submodule. Danil Kirsanov's implementation of MMP algorithm.
+* Eigen
+* OpenMesh
+* libigl
+* geodesic: Danil Kirsanov's implementation of MMP algorithm.
 
+All have been included here directly or as submodules.
 
 ## Build
 1. Clone the repo: ```git clone --recurse-submodules https://github.com/zishun/MeshUtility.git```
