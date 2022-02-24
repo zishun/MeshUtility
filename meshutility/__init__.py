@@ -8,3 +8,4 @@ from .split_connected_components import *
 from .write_obj_lines import *
 from .pygeodesic import *
 from .pyisocurve import *
+from .pyremesh import *
