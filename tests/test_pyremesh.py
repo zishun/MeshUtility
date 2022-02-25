@@ -10,7 +10,6 @@ def rect():
         [ 1,  1, 0],
         [-1,  1, 0],
     ], 'f')
-    pts[:, 0] += 0.2
     faces = np.array([
         [0, 1, 2],
         [0, 2, 3]
@@ -19,7 +18,7 @@ def rect():
     remesher = mu.pyremesh.remesher()
     remesher.init_mesh(pts, faces)
     remesher.set_feature_vertices_by_angle(20)
-    remesher.remesh(0.1, 10)
+    remesher.remesh(0.5, 10)
     verts, faces = remesher.get_mesh()
     mesh = om.TriMesh(verts, faces)
     om.write_mesh(folder+'rect.obj', mesh)

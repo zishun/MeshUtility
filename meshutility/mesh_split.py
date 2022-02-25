@@ -12,7 +12,7 @@ Feb 13, 2021
 import numpy as np
 import openmesh as om
 
-__all__ = ['split_mesh']
+__all__ = ['split_mesh', 'split_mesh_complete']
 
 
 def split_mesh(V, F, edges, ratios):
@@ -58,7 +58,21 @@ def split_mesh(V, F, edges, ratios):
 
 
 def split_mesh_complete(V, F, edges, ratios):
-    # This is the complete version. Maybe overshoot.
+    """
+    Split mesh. This is the complete version. Maybe overshoot.
+
+    Parameters
+    ----------
+    V : numpy.array
+    F : numpy.array
+    edges : numpy.array, given in the order of the curve
+    ratios : numpy.array, corresponding to rows in edges.
+        p0 * (1-r) + p1 * r
+    Returns
+    -------
+    mesh : openmesh.TriMesh
+    index : list (int)
+    """
 
     # unify the edges/ratios, make sure e[0] <= e[1]
     E = edges.copy()
@@ -131,6 +145,7 @@ def split_mesh_complete(V, F, edges, ratios):
         f1 = [fh.idx() for fh in M.vf(v1)]
         f = list(set(f0).intersection(f1))
         if len(f) != 1:
+            print(len(f))
             assert(False)
         return M.face_handle(f[0])
 
@@ -154,6 +169,7 @@ def split_mesh_complete(V, F, edges, ratios):
             M.add_face(f0)
             M.add_face(f1)
     M.garbage_collection()
+    #return M, new_index  # return polymesh
 
     def triangulate(M, fh):
         # using deque is an overshoot.
@@ -185,17 +201,18 @@ def split_mesh_complete(V, F, edges, ratios):
             e1 = [i for i in range(idx[1], idx[2]+1)]
             e2 = [i for i in range(idx[2]-n, idx[0]+1)]
             # rotate to make sure e0 is splitted.
-            if len(e1) > 2:
-                e0, e1, e2 = e1, e2, e0
-            elif len(e2) > 2:
-                e0, e1, e2 = e2, e0, e1
+            if len(e0) == 2:
+                if len(e1) > 2:
+                    e0, e1, e2 = e1, e2, e0
+                elif len(e2) > 2:
+                    e0, e1, e2 = e2, e0, e1
             M.delete_face(fh, delete_isolated_vertices=False)
-            for i in range(len(e0)-1):
+            for i in range(1, len(e0)-2):
                 M.add_face([vhs[i] for i in [e0[i], e0[i+1], e1[-1]]])
             for i in range(len(e1)-1):
-                M.add_face([vhs[i] for i in [e1[i], e1[i+1], e0[-1]]])
+                M.add_face([vhs[i] for i in [e1[i], e1[i+1], e0[-2]]])
             for i in range(len(e2)-1):
-                M.add_face([vhs[i] for i in [e2[i], e2[i+1], e0[0]]])
+                M.add_face([vhs[i] for i in [e2[i], e2[i+1], e0[1]]])
 
     # May generate degenerated triangles if using the build-in triangulation by converting PolyMesh to TriMesh
     # Tiranulate explicitly!
