@@ -11,3 +11,6 @@
 [submodule "ext/libigl"]
 	path = ext/libigl
 	url = https://github.com/libigl/libigl/
+[submodule "ext/ShapeOp"]
+	path = ext/ShapeOp
+	url = https://github.com/EPFL-LGG/ShapeOp

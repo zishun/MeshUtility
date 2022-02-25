@@ -9,3 +9,4 @@ from .write_obj_lines import *
 from .pygeodesic import *
 from .pyisocurve import *
 from .pyremesh import *
+from .pyshapeop import *
