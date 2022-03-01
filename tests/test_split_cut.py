@@ -6,7 +6,7 @@ from numpy.polynomial import Chebyshev as T
 
 def test_cut():
     mesh = om.read_trimesh('../data/sphere_cvt.obj')
-    field = mesh.points()[:, 2]
+    field = mesh.points()[:, 1] - mesh.points()[:, 2]
 
     isocurve = mu.IsoCurve(mesh.points(), mesh.face_vertex_indices(), field)
     pts, on_edges, ratios, isocurve_indices = isocurve.extract(0.)
@@ -109,5 +109,5 @@ def test_split_rect_1():
     
 
 if __name__ == '__main__':
-    # test_cut()
-    test_split_rect_1()
+    test_cut()
+    # test_split_rect_1()

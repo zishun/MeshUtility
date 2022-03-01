@@ -25,11 +25,13 @@ Python:
 * networkx
 * matplotlib
 * openmesh
+* libigl Python bindings
 * meshplot: only for jupyter notebook 
 
 Install with 
 ```shell
 pip install numpy scipy networkx matplotlib openmesh
+conda install -c conda-forge igl
 conda install -c conda-forge meshplot
 ```
 

@@ -12,13 +12,14 @@ Feb 13, 2021
 import numpy as np
 import openmesh as om
 import networkx as nx
+import igl
 
 from .mesh2graph import ff_graph
 
 __all__ = ['cut_along_curve']
 
 
-def cut_along_curve(V, F, curve_index):
+def cut_along_curve(V, F, curve_index, method='igl'):
     """
     Cut mesh along curve.
 
@@ -26,13 +27,43 @@ def cut_along_curve(V, F, curve_index):
     ----------
     V : numpy.array
     F : numpy.array
-    curve_index : list
+    curve_index : list (int)
     Returns
     -------
     mesh : openmesh.TriMesh
     index : list (int)
     """
+    if method == 'igl':
+        return cut_along_curve_igl(V, F, curve_index)
+    else:
+        return cut_along_curve_mu(V, F, curve_index)
 
+
+def cut_along_curve_igl(V, F, curve_index):
+    mesh = om.TriMesh(V, F)
+    cuts = np.zeros_like(F, 'i')
+    vhs = [mesh.vertex_handle(i) for i in curve_index]
+    for i in range(len(curve_index)-1):
+        he = mesh.find_halfedge(vhs[i], vhs[i+1])
+        for _ in range(2):  # two halfedges
+            if not he.is_valid():
+                break
+            if not mesh.is_boundary(he):
+                fh = mesh.face_handle(he)
+                f = F[fh.idx()]
+                for j in range(3):
+                    if {f[j], f[(j+1)%3]} == {curve_index[i], curve_index[i+1]}:  # compare two sets
+                        cuts[fh.idx(),j] = 1
+                        break
+            he = mesh.opposite_halfedge_handle(he)
+
+    V1, F1 = igl.cut_mesh(V, F, cuts)
+    mesh = om.TriMesh(V1, F1)
+    curve_new_index = [F1[np.where(F==i)].max() for i in curve_index]
+    return mesh, curve_new_index
+
+
+def cut_along_curve_mu(V, F, curve_index):
     mesh = om.TriMesh(V, F)
     assert mesh.n_vertices() == V.shape[0], "Invalid input mesh"
     assert(len(curve_index) > 1)
