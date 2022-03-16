@@ -126,6 +126,15 @@ setup(
     author_email="",
     description="A collection of python utilities for mesh processing",
     long_description="",
+    url="https://github.com/zishun/MeshUtility",
+    project_urls={
+        "Bug Tracker": "https://github.com/zishun/MeshUtility/issues",
+    },
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+        "Operating System :: OS Independent",
+    ],
     install_requires=[ 'numpy', 'scipy', 'openmesh', 'networkx', 'matplotlib' ],
     ext_modules=[CMakeExtension("meshutility.cpp")],
     cmdclass={"build_ext": CMakeBuild},
