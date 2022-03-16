@@ -136,7 +136,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[ 'numpy', 'scipy', 'openmesh', 'networkx', 'matplotlib' ],
-    ext_modules=[CMakeExtension("meshutility.")],
+    ext_modules=[CMakeExtension("meshutility.cpp")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     # extras_require={"test": ["pytest>=6.0"]},  # TODO
