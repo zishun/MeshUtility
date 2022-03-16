@@ -19,6 +19,7 @@ add_definitions(-D_DISABLE_EXTENDED_ALIGNED_STORAGE -DSHAPEOP_HEADER_ONLY)
 
 if (MSVC)
     #add_definitions(-D_USE_MATH_DEFINES -D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-DSHAPEOP_EXPORT)
     add_compile_options("$<$<CONFIG:RELEASE>:/O2>")
 endif (MSVC)
 
