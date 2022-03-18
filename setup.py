@@ -129,7 +129,7 @@ setup(
     author_email="",
     description="A collection of python utilities for mesh processing",
     long_description=long_description,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     url="https://github.com/zishun/MeshUtility",
     project_urls={
         "Bug Tracker": "https://github.com/zishun/MeshUtility/issues",
