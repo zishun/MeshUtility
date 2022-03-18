@@ -7,6 +7,7 @@ import sys
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
+from pathlib import Path
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -119,13 +120,16 @@ class CMakeBuild(build_ext):
 
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 setup(
     name="meshutility",
     version="0.0.1",
     author="Zishun Liu",
     author_email="",
     description="A collection of python utilities for mesh processing",
-    long_description="",
+    long_description=long_description,
+    long_description_content_type='text/markdown'
     url="https://github.com/zishun/MeshUtility",
     project_urls={
         "Bug Tracker": "https://github.com/zishun/MeshUtility/issues",
@@ -134,6 +138,7 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
         "Operating System :: OS Independent",
+        "Topic :: Multimedia :: Graphics :: 3D Modeling",
     ],
     install_requires=[ 'numpy', 'scipy', 'openmesh', 'networkx', 'matplotlib' ],
     ext_modules=[CMakeExtension("meshutility.cpp")],

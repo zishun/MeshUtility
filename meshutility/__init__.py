@@ -5,7 +5,7 @@ from .mesh_split import *
 from .mesh2graph import *
 from .sphere_cvt import *
 from .split_connected_components import *
-from .write_obj_lines import *
+from .obj_lines_io import *
 from .pygeodesic import *
 from .pyisocurve import *
 from .pyremesh import *
