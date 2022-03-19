@@ -1,7 +1,7 @@
 [![Build](https://github.com/zishun/MeshUtility/actions/workflows/wheels.yml/badge.svg?branch=main)](https://github.com/zishun/MeshUtility/actions/workflows/wheels.yml)
 # MeshUtility
 
-A collection of python utilities for mesh processing.
+> A collection of python utilities for mesh processing.
 
 Install with
 ```

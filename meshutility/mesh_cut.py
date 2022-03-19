@@ -12,8 +12,8 @@ Feb 13, 2021
 import numpy as np
 import openmesh as om
 import networkx as nx
-import igl
 
+from .utils import igl_cut_mesh
 from .mesh2graph import ff_graph
 
 __all__ = ['cut_along_curve']
@@ -57,7 +57,7 @@ def cut_along_curve_igl(V, F, curve_index):
                         break
             he = mesh.opposite_halfedge_handle(he)
 
-    V1, F1 = igl.cut_mesh(V, F, cuts)
+    V1, F1 = igl_cut_mesh(V, F, cuts)
     mesh = om.TriMesh(V1, F1)
     curve_new_index = [F1[np.where(F==i)].max() for i in curve_index]
     return mesh, curve_new_index
