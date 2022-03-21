@@ -7,6 +7,8 @@ set(SRC_FILES
     main.cpp
     mmp_wrapper.h
     mmp_wrapper.cpp
+    fm.h
+    fm.cpp
 )
 
 pybind11_add_module(${PROJECT_NAME} ${SRC_FILES})

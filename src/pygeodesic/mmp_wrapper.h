@@ -7,6 +7,8 @@
 // If a copy of the BSD-3-Clause was not distributed with this file, You can
 // obtain one at https://opensource.org/licenses/BSD-3-Clause.
 
+#ifndef MESHUTILITY_MMP_WRAPPER_H
+#define MESHUTILITY_MMP_WRAPPER_H
 // export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 
 #include <iostream>
@@ -76,3 +78,4 @@ private:
                                  Eigen::VectorXd& D,
                                  double max_propagation_distance);
 };
+#endif  // MESHUTILITY_MMP_WRAPPER_H

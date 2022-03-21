@@ -20,7 +20,9 @@ A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtil
 - ```sphere_cvt```: iteratively approximate centroidal Voronoi tessellation (CVT) on the unit sphere (kind of uniform sampling).
 - ```split_connected_components```: split connected components.
 - ```write_obj_lines```: write polyline as a Wavefront .obj file that can be open with MeshLab.
-- ```pygeodesic``` module (C++): exact geodesic for triangular meshes.
+- ```pygeodesic``` module (C++): geodesic for triangular meshes.
+    - exact geodesic by Danil Kirsanov.
+    - fast marching, may use different speed on each face.
 - ```pyisocurve``` module (C++): almost the same as ```IsoCurve``` above.
 - ```pyremesh``` module (C++): incremental isotropic remeshing.
 - ```pyshapeop``` module (C++): a partial binding of ShapeOp.

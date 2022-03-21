@@ -6,7 +6,8 @@ from .mesh2graph import *
 from .sphere_cvt import *
 from .split_connected_components import *
 from .obj_lines_io import *
-from .pygeodesic import *
-from .pyisocurve import *
-from .pyremesh import *
-from .pyshapeop import *
+from . import pygeodesic
+from . import pyisocurve
+from . import pyremesh
+from . import pyshapeop
+from . import utils
