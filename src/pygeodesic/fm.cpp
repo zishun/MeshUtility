@@ -15,7 +15,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 #include "fm.h"
-#include <Eigen/LU>
+
 
 fastmarching::fastmarching(const Eigen::MatrixX3d& V, 
                            const Eigen::MatrixX3i& F)

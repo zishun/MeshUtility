@@ -373,7 +373,7 @@ void mmp_wrapper::distance_field(const Eigen::MatrixXd& V,
     std::vector<double> points;
     std::vector<unsigned> faces;
     Eigen::MatrixXi inserted_vertex_info;
-    if (edge_split > 0.0)
+    if (edge_split > 0.0 && source_indices.size() > 1)
     {
         double max_length =
         construct_mesh_for_edge_based_geodesic(V, F, source_indices,
