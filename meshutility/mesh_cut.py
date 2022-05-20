@@ -12,6 +12,7 @@ Feb 13, 2021
 import numpy as np
 import openmesh as om
 import networkx as nx
+import warnings
 
 from .utils import igl_cut_mesh
 from .mesh2graph import ff_graph
@@ -44,18 +45,19 @@ def cut_along_curve_igl(V, F, curve_index):
     cuts = np.zeros_like(F, 'i')
     vhs = [mesh.vertex_handle(i) for i in curve_index]
     for i in range(len(curve_index)-1):
-        he = mesh.find_halfedge(vhs[i], vhs[i+1])
-        for _ in range(2):  # two halfedges
-            if not he.is_valid():
-                break
+        he0 = mesh.find_halfedge(vhs[i], vhs[i+1])
+        if not he0.is_valid():
+            warnings.warn('[meshutility.cut_along_curve] invalid edge to cut %d->%d' % (curve_index[i], curve_index[i+1]))
+        he1 = mesh.opposite_halfedge_handle(he)
+        for he in [he0, he1]:
             if not mesh.is_boundary(he):
                 fh = mesh.face_handle(he)
                 f = F[fh.idx()]
                 for j in range(3):
-                    if {f[j], f[(j+1)%3]} == {curve_index[i], curve_index[i+1]}:  # compare two sets
+                    #if {f[j], f[(j+1)%3]} == {curve_index[i], curve_index[i+1]}:  # compare two sets
+                    if f[j] == curve_index[i] and f[(j+1)%3] == curve_index[i+1]:
                         cuts[fh.idx(),j] = 1
                         break
-            he = mesh.opposite_halfedge_handle(he)
 
     V1, F1 = igl_cut_mesh(V, F, cuts)
     mesh = om.TriMesh(V1, F1)

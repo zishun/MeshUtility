@@ -1,4 +1,6 @@
 [project]
+name = "meshutility"
+version = "0.0.1"
 dependencies = [
     "numpy",
     "openmesh",
