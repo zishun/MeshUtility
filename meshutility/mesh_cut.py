@@ -48,20 +48,41 @@ def cut_along_curve_igl(V, F, curve_index):
         he0 = mesh.find_halfedge(vhs[i], vhs[i+1])
         if not he0.is_valid():
             warnings.warn('[meshutility.cut_along_curve] invalid edge to cut %d->%d' % (curve_index[i], curve_index[i+1]))
-        he1 = mesh.opposite_halfedge_handle(he)
+        he1 = mesh.opposite_halfedge_handle(he0)
         for he in [he0, he1]:
             if not mesh.is_boundary(he):
                 fh = mesh.face_handle(he)
                 f = F[fh.idx()]
                 for j in range(3):
-                    #if {f[j], f[(j+1)%3]} == {curve_index[i], curve_index[i+1]}:  # compare two sets
-                    if f[j] == curve_index[i] and f[(j+1)%3] == curve_index[i+1]:
+                    if {f[j], f[(j+1)%3]} == {curve_index[i], curve_index[i+1]}:  # compare two sets
                         cuts[fh.idx(),j] = 1
                         break
 
     V1, F1 = igl_cut_mesh(V, F, cuts)
-    mesh = om.TriMesh(V1, F1)
     curve_new_index = [F1[np.where(F==i)].max() for i in curve_index]
+    # But curve_new_index may not be a valid curve
+    index_mapping = np.arange(V1.shape[0])
+    mesh = om.TriMesh(V1, F1)
+    v0 = curve_index[0]
+    for i in range(len(curve_index)-1):
+        # which is correct?
+        # curve_index[i] -> curve_index[i+1]
+        # curve_index[i] -> curve_new_index[i+1]
+        vh0 = mesh.vertex_handle(v0)
+        vh1 = mesh.vertex_handle(curve_index[i+1])
+        #vh2 = mesh.vertex_handle(curve_new_index[i+1])
+        he01 = mesh.find_halfedge(vh0, vh1)
+        #he02 = mesh.find_halfedge(vh0, vh2)
+        if not he01.is_valid():
+            index_mapping[curve_index[i+1]] = curve_new_index[i+1]
+            index_mapping[curve_new_index[i+1]] = curve_index[i+1]
+            v0 = curve_new_index[i+1]
+        else:
+            v0 = curve_index[i+1]
+        
+    # But curve_new_index may not be a valid curve
+    F1 = index_mapping[F1.ravel()].reshape((-1,3))
+    mesh = om.TriMesh(V1, F1)
     return mesh, curve_new_index
 
 
