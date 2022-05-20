@@ -11,3 +11,4 @@ from . import pyisocurve
 from . import pyremesh
 from . import pyshapeop
 from . import utils
+from .utils import get_scalar_field_on_resampled_points
