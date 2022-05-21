@@ -9,6 +9,9 @@ Date: Feb 16, 2021
 import numpy as np
 
 
+__all__ = ['write_obj_lines', 'read_obj_lines']
+
+
 def write_obj_lines(fn, verts, lines):
     """
     Write polylines to an obj file.

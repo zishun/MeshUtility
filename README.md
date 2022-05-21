@@ -13,19 +13,23 @@ A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtil
 
 ## Functions & Modules
 - ```colormap_vertex_color```: assign vertex color to visualize a scalar field defined on mesh.
+- ```cut_along_curve```: cut a mesh along a vertex chain.
+- ```ff_graph```: face-face graph of mesh.
+- ```get_scalar_field_on_resampled_points```: given a scalar field defined on a triangular mesh, get field values on resampled points.
 - ```IsoCurve``` module: extract isocurves on a scalar field defined on a manifold triangular mesh.
-- ```mesh_cut```: cut a mesh along a vertex chain.
-- ```mesh_split```: split a mesh by inserting new vertices defined on mesh edges.
-- ```read_obj_lines```: read polyline from a [Wavefront .obj file](https://en.wikipedia.org/wiki/Wavefront_.obj_file#Line_elements).
-- ```sphere_cvt```: iteratively approximate centroidal Voronoi tessellation (CVT) on the unit sphere (kind of uniform sampling).
-- ```split_connected_components```: split connected components.
-- ```write_obj_lines```: write polyline as a Wavefront .obj file that can be open with MeshLab.
 - ```pygeodesic``` module (C++): geodesic for triangular meshes.
     - exact geodesic by Danil Kirsanov.
     - fast marching, may use different speed on each face.
 - ```pyisocurve``` module (C++): almost the same as ```IsoCurve``` above.
 - ```pyremesh``` module (C++): incremental isotropic remeshing.
 - ```pyshapeop``` module (C++): a partial binding of ShapeOp.
+- ```read_obj_lines```: read polyline from a [Wavefront .obj file](https://en.wikipedia.org/wiki/Wavefront_.obj_file#Line_elements).
+- ```remove_unreferenced_vertices```: remove unreferenced vertices.
+- ```sphere_cvt```: iteratively approximate centroidal Voronoi tessellation (CVT) on the unit sphere (kind of uniform sampling).
+- ```split_connected_components```: split connected components.
+- ```split_mesh, split_mesh_complete```: split a mesh by inserting new vertices defined on mesh edges.
+- ```write_obj_lines```: write polyline as a Wavefront .obj file that can be open with MeshLab.
+- ```vv_graph```: vertex-vertex graph of mesh.
 
 
 ## Build from Source
