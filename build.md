@@ -3,7 +3,7 @@
 ## TL;DR
 ```
 pip install numpy scipy networkx matplotlib openmesh
-conda install -c conda-forge meshplot  # skip this if 
+conda install -c conda-forge meshplot  # may skip this. only for jupyter notebook 
 git clone --recurse-submodules https://github.com/zishun/MeshUtility.git
 python setup.py install
 ```
@@ -25,7 +25,6 @@ Python:
 * meshplot: only for jupyter notebook 
 
 </details>
-
 
 
 Install with 
