@@ -5,7 +5,7 @@
 
 Install with
 ```
-pip install meshutility==0.0.1
+pip install meshutility==0.0.2
 ```
 
 A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtility/).

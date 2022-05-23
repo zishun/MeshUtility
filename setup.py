@@ -124,7 +124,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 setup(
     name="meshutility",
-    version="0.0.1",
+    version="0.0.2",
     author="Zishun Liu",
     author_email="",
     description="A collection of python utilities for mesh processing",
