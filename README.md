@@ -8,7 +8,7 @@ Install with
 pip install meshutility==0.0.2
 ```
 
-A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtility/).
+A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtility/) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/zishun/meshutility/blob/main/tests/meshutility-tutorial.ipynb).
 
 
 ## Functions & Modules
