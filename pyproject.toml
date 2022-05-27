@@ -1,13 +1,13 @@
-[project]
-name = "meshutility"
-version = "0.0.2"
-dependencies = [
-    "numpy",
-    "openmesh",
-    "networkx",
-    "matplotlib",
-    "scipy",
-]
+# [project]
+# name = "meshutility"
+# version = "0.0.2"
+# dependencies = [
+#     "numpy",
+#     "openmesh",
+#     "networkx",
+#     "matplotlib",
+#     "scipy",
+# ]
 
 [build-system]
 requires = [

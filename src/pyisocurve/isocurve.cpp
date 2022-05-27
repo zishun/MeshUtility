@@ -179,7 +179,7 @@ void isocurve::extract_on_face_through2(const unsigned int i,
     //        /|\
     //       / | \
     //      /  |  \
-    // vh2 /---|---\ vh3
+    // vh2 +---|---+ vh3
     //        vh0
 
     EigenTriMesh::HalfedgeHandle heh2 = mesh_.next_halfedge_handle(heh);

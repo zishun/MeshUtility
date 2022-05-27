@@ -16,11 +16,10 @@ A simple tutorial is available [here](https://zishun.github.io/projects/MeshUtil
 - ```cut_along_curve```: cut a mesh along a vertex chain.
 - ```ff_graph```: face-face graph of mesh.
 - ```get_scalar_field_on_resampled_points```: given a scalar field defined on a triangular mesh, get field values on resampled points.
-- ```IsoCurve``` module: extract isocurves on a scalar field defined on a manifold triangular mesh.
 - ```pygeodesic``` module (C++): geodesic for triangular meshes.
     - exact geodesic by Danil Kirsanov.
     - fast marching, may use different speed on each face.
-- ```pyisocurve``` module (C++): almost the same as ```IsoCurve``` above.
+- ```pyisocurve``` module (C++): extract isocurves on a scalar field defined on a manifold triangular mesh.
 - ```pyremesh``` module (C++): incremental isotropic remeshing.
 - ```pyshapeop``` module (C++): a partial binding of ShapeOp.
 - ```read_obj_lines```: read polyline from a [Wavefront .obj file](https://en.wikipedia.org/wiki/Wavefront_.obj_file#Line_elements).
