@@ -34,7 +34,7 @@ class isocurve {
 public:
     isocurve(const Eigen::MatrixXd& V, const Eigen::MatrixXi& F, const Eigen::VectorXd& field);
     ~isocurve();
-    void extract(const double val, const double eqlTol,
+    void extract(const double val, const double eqlTol, const bool return_path,
                  Eigen::MatrixXd& _pts,
                  Eigen::MatrixXi& _on_edge,
                  Eigen::VectorXd& _ratio,
@@ -42,7 +42,7 @@ public:
                  // Eigen::VectorXi& _nxt,
                  // Eigen::VectorXi& _heads) const;
     std::tuple<Eigen::MatrixXd, Eigen::MatrixXi, Eigen::VectorXd, std::vector<std::deque<int>>>
-    extract(const double val, const double eqlTol);
+    extract(const double val, const double eqlTol, const bool return_path);
 
 private:
     void collect_pts(Eigen::VectorXi& idxOnVerts,

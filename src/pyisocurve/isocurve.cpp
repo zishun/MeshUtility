@@ -45,7 +45,7 @@ isocurve::isocurve(const Eigen::MatrixXd& V,
 
 isocurve::~isocurve(){}
 
-void isocurve::extract(const double val, const double eqlTol,
+void isocurve::extract(const double val, const double eqlTol, const bool return_path,
                        Eigen::MatrixXd& _pts,
                        Eigen::MatrixXi& _on_edge,
                        Eigen::VectorXd& _ratio,
@@ -106,8 +106,28 @@ void isocurve::extract(const double val, const double eqlTol,
     }
     _ratio = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(ratio.data(), ratio.size());
 
-    // collect results: topology
-    construct_topology(_curve_all, _pts.rows(), curve_segments, curve_segments_dir);
+    if (return_path) {
+        // collect results: topology of paths
+        construct_topology(_curve_all, _pts.rows(), curve_segments, curve_segments_dir);
+    } else {
+        // if paths are not required, return a collection of edges.
+        // the last column is the direction info.
+        _curve_all.clear();
+        for (size_t i = 0; i < curve_segments.size(); ++i) {
+            std::deque<int> curve;
+            curve.push_back(curve_segments[i][0]);
+            curve.push_back(curve_segments[i][1]);
+            switch (curve_segments_dir[i]) {
+            case CurveSegmentDir::Determined:
+                curve.push_back(1);
+                break;
+            case CurveSegmentDir::Flexible:
+                curve.push_back(2);
+                break;
+            }
+            _curve_all.push_back(curve);
+        }
+    }
 }
 
 void isocurve::collect_pts(Eigen::VectorXi& idxOnVerts,
@@ -331,7 +351,8 @@ void isocurve::construct_topology(std::vector<std::deque<int>>& curve_all,
         }
         switch (neighbors.size()) {
         case 0:
-            std::cout << "[Warning!] Isolated point." << std::endl;
+            std::cout << "[Warning!] Isolated point";
+            std::cout << " (#" << k << ")." << std::endl;
             break;
         case 1:
 //        if (neighbors.size() == 1) {
@@ -341,11 +362,13 @@ void isocurve::construct_topology(std::vector<std::deque<int>>& curve_all,
         case 2:
             if (neighbor_tags[0] == neighbor_tags[1] && std::abs(neighbor_tags[1]) == 1) {
                 // both 1 or both -1
-                std::cout << "[Warning!] Non-manifold curve." << std::endl;
+                std::cout << "[Warning!] Non-manifold curve";
+                std::cout << " (#" << k << ")." << std::endl;
             }
             break;
         default:
-            std::cout << "[Warning!] Non-manifold. more than 2 neighbors." << std::endl;
+            std::cout << "[Warning!] Non-manifold. more than 2 neighbors"; 
+            std::cout << " (#" << k << " has " << neighbors.size() << " neighbors)." << std::endl;
             break;
         }
     }
@@ -498,12 +521,12 @@ int isocurve::extend_back(std::deque<int>& curve, int back, const SpMat& G, std:
 }
 
 std::tuple<Eigen::MatrixXd, Eigen::MatrixXi, Eigen::VectorXd, std::vector<std::deque<int>>>
-isocurve::extract(const double val, const double eqlTol) {
+isocurve::extract(const double val, const double eqlTol, const bool return_path) {
     Eigen::MatrixXd pts;
     Eigen::MatrixXi on_edge;
     Eigen::VectorXd ratio;
     std::vector<std::deque<int>> curves_all;
-    extract(val, eqlTol, pts, on_edge, ratio, curves_all);
+    extract(val, eqlTol, return_path, pts, on_edge, ratio, curves_all);
     // std::cout << curves_all.size() << std::endl;
     auto res = std::make_tuple(pts, on_edge, ratio, curves_all);
     return res;

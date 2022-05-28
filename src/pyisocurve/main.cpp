@@ -26,6 +26,7 @@ PYBIND11_MODULE(pyisocurve, m) {
 
     py::class_<isocurve>(m, "isocurve")
                 .def(py::init<const Eigen::MatrixXd&, const Eigen::MatrixXi&, const Eigen::VectorXd&>())
-                .def("extract", py::overload_cast<double, double>(&isocurve::extract));
-
+                .def("extract", py::overload_cast<double, double, bool>(&isocurve::extract),
+                "",
+                py::arg("val"), py::arg("eqlTol"), py::arg("return_path")=true);
 }
