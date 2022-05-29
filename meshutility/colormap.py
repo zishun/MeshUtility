@@ -1,8 +1,10 @@
 from matplotlib import cm
+import matplotlib.pyplot as plt
 import openmesh as om
 import numpy as np
 
-__all__ = ['colormap_vertex_color']
+
+__all__ = ['colormap_vertex_color', 'generate_colormap_image', 'generate_checkerboard_image']
 
 
 def colormap_vertex_color(fn, v0, f0, scalar_field, scalar_min=None,
@@ -22,3 +24,25 @@ def colormap_vertex_color(fn, v0, f0, scalar_field, scalar_min=None,
     vcolors = mesh.vertex_colors()
     vcolors[:,:3] = cmap(field)[:,:3]
     om.write_mesh(fn, mesh, vertex_color=True)
+
+
+def generate_colormap_image(fn_img, cmap='jet', shape=(1024,1024)):
+    cmap = cm.get_cmap(cmap)
+
+    field = np.arange(shape[0])/shape[0]
+    img = (cmap(field)[::-1, :3]*255).astype(np.uint8)  # also accept 2D mat
+    img = np.repeat(img.reshape((shape[0], 1, -1)), shape[1], axis=1)
+
+    plt.imsave(fn_img, img)
+
+
+def generate_checkerboard_image(fn_img, block_size=(100,100), block_grid=(9,7)):
+    h, w = block_size
+    img = np.zeros((h*block_grid[0], w*block_grid[1]), 'u1')
+    for i in range(block_grid[0]):
+        for j in range(block_grid[1]):
+            if (i+j)%2 == 1:
+                img[i*h:(i+1)*h, j*w:(j+1)*w] = 255
+    img = np.repeat(img[:,:,np.newaxis], 3, axis=2)
+
+    plt.imsave(fn_img, img)
