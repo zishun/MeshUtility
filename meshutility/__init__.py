@@ -1,4 +1,5 @@
 from .colormap import *
+from .face_centers import *
 from .mesh_cut import *
 from .mesh_split import *
 from .mesh2graph import *
