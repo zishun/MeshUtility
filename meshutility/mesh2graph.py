@@ -11,6 +11,7 @@ Feb 15, 2021
 
 import openmesh as om
 import networkx as nx
+import numpy as np
 
 __all__ = ['ff_graph', 'vv_graph']
 
