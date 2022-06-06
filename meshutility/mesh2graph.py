@@ -24,10 +24,16 @@ def ff_graph(mesh):
     return G_face
 
 
-def vv_graph(mesh):
+def vv_graph(mesh, edge_length_weight=False):
     G = nx.empty_graph(mesh.n_vertices())
     indices = mesh.ev_indices()
-    G.add_edges_from(indices)
+    if not edge_length_weight:
+        G.add_edges_from(indices)
+    else:
+        pts = mesh.points()
+        lengths = np.linalg.norm(pts[indices[:,0]]-pts[indices[:,1]], axis=1)
+        edges = [(e[0], e[1], l) for e, l in zip(indices, lengths)]
+        G.add_weighted_edges_from(edges)
     return G
 
 

@@ -43,6 +43,9 @@ def generate_checkerboard_image(fn_img, block_size=(100,100), block_grid=(9,7)):
         for j in range(block_grid[1]):
             if (i+j)%2 == 1:
                 img[i*h:(i+1)*h, j*w:(j+1)*w] = 255
+    
+    # 1 channel -> 3 channels
+    # plt saves 1-channel array with a colormap.
+    # 3-channel array will be saved as an RGB image.
     img = np.repeat(img[:,:,np.newaxis], 3, axis=2)
-
     plt.imsave(fn_img, img)
