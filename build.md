@@ -36,11 +36,13 @@ pip install numpy scipy networkx matplotlib openmesh
 C++:
 </b>
 </summary>
+
 * Eigen
 * OpenMesh
 * libigl
 * geodesic: Danil Kirsanov's implementation of MMP algorithm.
 * ShapeOp
+
 </details>
 
 All have been included here directly or as submodules.

@@ -7,6 +7,7 @@ from .remove_unreferenced import *
 from .sphere_cvt import *
 from .split_connected_components import *
 from .obj_lines_io import *
+from . import cameras
 from . import pygeodesic
 from . import pyisocurve
 from . import pyremesh
