@@ -13,8 +13,11 @@ def colormap_vertex_color(fn, v0, f0, scalar_field, scalar_min=None,
     save as a *.off file. OpenMesh does not write vertex colors in obj files.
     '''
     cmap = cm.get_cmap(cmap)
-    # scalar_min, scalar_max can be None here.
-    field = np.clip(scalar_field, scalar_min, scalar_max)
+    # scalar_min or scalar_max can be None here.
+    if scalar_min is None and scalar_max is None:
+        field = scalar_field
+    else:
+        field = np.clip(scalar_field, scalar_min, scalar_max)
 
     if scalar_min is None:
         scalar_min = scalar_field.min()
